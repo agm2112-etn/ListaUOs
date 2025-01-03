@@ -32,17 +32,26 @@ foreach (SearchResult result in searcher.FindAll())
     {
         usersByDepartment[department] = new List<User>();
     }
-
+    //if (department.Contains("DLR"))
+    //{
+    //    int a = 1;
+    //}
+    
     usersByDepartment[department].Add(new User { Name = userName, SamAccountName = samAccountName, Company = company, MatriculaSAP = matriculaSap });
 }
 
+var sortedUsersByDepartment = usersByDepartment.OrderBy(kvp => kvp.Key).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
-
-foreach (var department in usersByDepartment)
+foreach (var department in sortedUsersByDepartment)
 {
+    
     // Ordena os usuários por nome
     department.Value.Sort((x, y) => x.Name.CompareTo(y.Name));
 
+    if(department.Key.Contains("DLR"))
+    {
+        int i = 1;
+    }
     string filePath = System.IO.Path.Combine(excelDirectory, $"{department.Key}.xlsx");
 
     using (var workbook = new XLWorkbook())
